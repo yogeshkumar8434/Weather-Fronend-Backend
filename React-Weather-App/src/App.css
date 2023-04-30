@@ -58,7 +58,7 @@ input[type="text"] {
     outline: none;
 }
 .submit{
-    border: 0;
+    border: 1px solid #068dd6;
     padding: 8px 20px;
     border-radius: 10px;
     font-weight: lighter;

@@ -1,50 +1,40 @@
-import React, {Component} from "react";
+import React,{useState} from "react";
 import "./App.css";
 import "./fontawesome.min.css";
 import Weather from "./compontents/Weather";
 import Form from "./compontents/Form";
 
-class App extends Component {
+const App =()=> {
 
-  state = {
-    Temperature: '',
-    city: '',
-    country: '',
-    humidity: '',
-    description: '',
-    error: ''
-  }
+const[Temperature, setTemperature] = useState('');
+const[city, setCity] = useState('');
+const[humidity, setHumidity] = useState('');
+const[description, setDescription] = useState('');
+const[error, setError] = useState('');
+const[country, setCountry] = useState('');
 
-
-  //    Fetch api---------
-  getWeather =  async (e) => {
+  //    Fetch API From the django API end point.
+  const getWeather =  async (e) => {
     e.preventDefault()
     const city = e.target.elements.city.value;
     const api = await fetch(`http://localhost:8000/weather/${city}/`)
     const data = await  api.json();
     if (city) {
-      this.setState({
-        Temperature: data.main.temp,
-        city: data.name,
-        country: data.sys.country,
-        humidity: data.main.humidity,
-        description: data.weather[0].description,
-        error: ''
-        
-      })
+      setTemperature(data.main.temp);
+      setCity(data.name);
+      setHumidity(data.main.humidity);
+      setDescription(data.weather[0].description);
+      setError('');
+      setCountry(data.sys.country);
     } else{
-      this.setState({
-        Temperature: '',
-        city: '',
-        country: '',
-        humidity: '',
-        description: '',
-        error: 'Please Enter The City ...! '
-      })
+      setTemperature('');
+      setCity('');
+      setHumidity('');
+      setDescription('');
+      setError('Invalid City');
+      setCountry('');
     }
   }
-
-  render() { 
   return (
     <div className="wrapper">
       <div className="form-container" >
@@ -53,22 +43,19 @@ class App extends Component {
               <img className="cloud" src="https://freesvg.org/storage/img/thumb/weather.png"></img>
               <br></br>
           </div>
-
-          <Form getWeather={this.getWeather}/>
-
+          <Form getWeather={getWeather}/>
           <Weather 
-          Temperature= {this.state.Temperature}
-          city= {this.state.city}
-          country= {this.state.country}
-          humidity= {this.state.humidity}
-          description= {this.state.description}
-          error= {this.state.error}
+          Temperature= {Temperature}
+          city= {city}
+          country= {country}
+          humidity= {humidity}
+          description= {description}
+          error= {error}
           />
         
       </div> 
     </div>
   );
   }
-}
 
 export default App;
